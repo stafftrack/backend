@@ -1,9 +1,13 @@
 import express from 'express'
-const app = express();
 import router from './api/router.js'
+import cors from "cors";
+//import sendReort from './sendReport.js'
+
 
 const port = 3000;
+const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use("/static",express.static("./static"));
 
