@@ -9,5 +9,3 @@ RUN npm install
 COPY . .
 
 CMD [ "node", "main.js" ]
-
-EXPOSE 3000
