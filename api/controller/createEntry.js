@@ -1,0 +1,84 @@
+//import db from '../db.js'
+import sendEmail from '../utils/sendEmail.js'
+import sendImageToModel from '../utils/sendImage.js';
+import supabase from '../supabase.js';
+
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
+export default async function createEntry(req, res, next) {
+  try{
+    const { empId, shift, deptId, zone, ToolScanTime, date, arrived_time } = JSON.parse(req.body.empInfo);
+    /*
+    {
+      "empId": "EMP017",
+      "shift": "7:30",
+      "deptId": "DEPT4",
+      "zone": "AZ",
+      "ToolScanTime":2.5,
+      "date": "9/11/2023",
+      "arrived_time":"7.14"
+    }
+    */
+    const url = req.file.path;
+    console.log(url);
+    console.log(empId, shift, deptId, zone, date, arrived_time, ToolScanTime);
+
+    if (!(empId && shift && deptId && zone && date && arrived_time && ToolScanTime)) {
+      return res.status(400).json({ error: "Missing Required Input" });
+    }
+
+    //send image to AI model
+    const contraband = await sendImageToModel(url); 
+    console.log(contraband)
+    if( contraband ){
+      //(to_who, subject, message="Hello!", filename=null, path=null)
+      sendEmail().text_attachments(
+        "raymand0109@gmail.com",
+        `Notification of Employee Carrying Contraband`,
+        `
+        EmpId: ${empId}
+        Date: ${date}
+        DeptId: ${deptId}
+        Zone: ${zone}
+        During our routine inspection, it was discovered that this employee was carrying contraband items. 
+        This incident poses a serious breach of our company's policies and regulations, and we believe it requires immediate attention.
+        `,
+        `ContrabandImage.jpg`,
+        url
+      )
+      
+    }
+
+    //Insert entry info into table
+
+    const parts = date.split("/");
+    const new_date = `${parts[2]}-${parts[1]}-${parts[0]}`
+
+    const json_data = { 
+      EmpId: empId, 
+      EmpShift: shift, 
+      DeptId: deptId,
+      Zone: zone,
+      ToolScanTime: ToolScanTime,
+      date: new_date,
+      time: arrived_time,
+      Img: url,
+      has_contraband: contraband!==null,
+      contraband: contraband,
+    }
+    
+    const { error } = await supabase
+    .from('Entry Data')
+    .insert(json_data)
+    console.log("error:", error)
+
+
+    return res.status(200).json(json_data);
+
+  } catch (err) {
+      return res.status(500).json({ error: err });
+  }
+}
