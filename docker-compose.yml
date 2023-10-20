@@ -1,14 +1,15 @@
 version: '3.9'
 
 services:
-  #frontend:
-  #  restart: always
-  #  image: frontend
-  #  container_name: frontend-container
-  #  ports:
-  #    - "80:80"
-  #  networks:
-  #    - hackathon_network
+  frontend:
+    restart: always
+    image: frontend
+    container_name: frontend-container
+    build: client/
+    ports:
+      - "80:80"
+    networks:
+      - hackathon_network
   
   backend:
     restart: always
@@ -26,11 +27,11 @@ services:
     networks:
       - hackathon_network
 
-  fake-ai-server:
+  ai-server:
     restart: always
     image: ai-server
     container_name: ai-server-container
-    build: fake-ai-server/
+    build: ai-server/
     volumes:
       - ./static:/app/static
     expose:
