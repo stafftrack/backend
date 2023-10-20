@@ -1,0 +1,47 @@
+version: '3.9'
+
+services:
+  #frontend:
+  #  restart: always
+  #  image: frontend
+  #  container_name: frontend-container
+  #  ports:
+  #    - "80:80"
+  #  networks:
+  #    - hackathon_network
+  
+  backend:
+    restart: always
+    image: backend
+    container_name: backend-container
+    build: backend/
+    volumes:
+      - ./static:/app/static
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+    #env_file:
+    #  - backend/.env
+    networks:
+      - hackathon_network
+
+  fake-ai-server:
+    restart: always
+    image: ai-server
+    container_name: ai-server-container
+    build: fake-ai-server/
+    volumes:
+      - ./static:/app/static
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+    networks:
+      - hackathon_network
+
+networks:
+  hackathon_network:
+
+
+
