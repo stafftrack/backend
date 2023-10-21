@@ -19,7 +19,7 @@ export default async function createEntry(req, res, next) {
       "zone": "AZ",
       "ToolScanTime":2.5,
       "date": "9/11/2023",
-      "arrived_time":"7.14"
+      "arrived_time":"7:14"
     }
     */
     const url = req.file.path;
@@ -55,7 +55,15 @@ export default async function createEntry(req, res, next) {
     //Insert entry info into table
 
     const parts = date.split("/");
-    const new_date = `${parts[2]}-${parts[1]}-${parts[0]}`
+    const new_date = `${parts[2]}-${parts[0]}-${parts[1]}`
+    
+    const countMiutes = (time) => {
+      const t = time.split(':')
+      return parseInt(t[0])*60 + parseInt(t[1]);
+    }  
+    const timeDifference = countMiutes(arrived_time) - countMiutes(shift);
+    const status = timeDifference > 30 ? "Late" : timeDifference < -30 ? "Early" : "On Time";
+
 
     const json_data = { 
       EmpId: empId, 
@@ -66,14 +74,15 @@ export default async function createEntry(req, res, next) {
       date: new_date,
       time: arrived_time,
       Img: url,
-      has_contraband: contraband!==null,
+      status: status,
+      has_contraband: contraband!==undefined && contraband!==null,
       contraband: contraband,
     }
     
     const { error } = await supabase
     .from('Entry Data')
     .insert(json_data)
-    console.log("error:", error)
+    console.log("supabase -> error:", error)
 
 
     return res.status(200).json(json_data);
