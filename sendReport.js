@@ -119,7 +119,7 @@ cron.schedule('*/5 * * * *', async () => {
     await produceReport(startDateOfWeek, endDateOfWeek, filename);
     const text = await getInfoFromGPT(endDateOfWeek);
       sendEmail().text_attachments(
-      "dylan920901@gmail.com", 
+      "dailydailyimf15@gmail.com", 
       "Weekly Report",
       text,
       filename,
