@@ -36,7 +36,7 @@ export default async function createEntry(req, res, next) {
     if( contraband ){
       //(to_who, subject, message="Hello!", filename=null, path=null)
       sendEmail().text_attachments(
-        "raymand0109@gmail.com",
+        "m4xshen@gmail.com",
         `Notification of Employee Carrying Contraband`,
         `
 EmpId: ${empId}
