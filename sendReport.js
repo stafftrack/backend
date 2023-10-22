@@ -114,12 +114,12 @@ const startDateOfWeek = new Date(endDateOfWeek);
 startDateOfWeek.setDate(endDateOfWeek.getDate() - 6); 
 console.log(startDateOfWeek.toLocaleDateString());
   
-cron.schedule('*/2 * * * *', async () => {
+cron.schedule('*/5 * * * *', async () => {
   try{
     await produceReport(startDateOfWeek, endDateOfWeek, filename);
     const text = await getInfoFromGPT(endDateOfWeek);
       sendEmail().text_attachments(
-      "raymand0109@gmail.com", 
+      "dylan920901@gmail.com", 
       "Weekly Report",
       text,
       filename,
