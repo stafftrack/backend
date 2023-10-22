@@ -115,15 +115,19 @@ startDateOfWeek.setDate(endDateOfWeek.getDate() - 6);
 console.log(startDateOfWeek.toLocaleDateString());
   
 cron.schedule('*/2 * * * *', async () => {
-  await produceReport(startDateOfWeek, endDateOfWeek, filename);
-  const text = await getInfoFromGPT(endDateOfWeek);
-    sendEmail().text_attachments(
-    "raymand0109@gmail.com", 
-    "Weekly Report",
-    text,
-    filename,
-    "report.pdf")
-    console.log('running a task every minute');
+  try{
+    await produceReport(startDateOfWeek, endDateOfWeek, filename);
+    const text = await getInfoFromGPT(endDateOfWeek);
+      sendEmail().text_attachments(
+      "raymand0109@gmail.com", 
+      "Weekly Report",
+      text,
+      filename,
+      "report.pdf")
+      console.log('running a task every minute');
+  }catch(err){
+    console.log(err);
+  }
 });
 
 export default ()=>{
