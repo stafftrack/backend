@@ -97,8 +97,8 @@ async function getInfoFromGPT(endDateOfWeek){
     }
     content = content + `"""`
 
-    //const textFromAI = await openaiAPI(content);
-    const textFromAI = "test"
+    const textFromAI = await openaiAPI(content);
+    //const textFromAI = "test"
     console.log(textFromAI);
     return textFromAI;
   }catch(error){
@@ -114,14 +114,16 @@ const startDateOfWeek = new Date(endDateOfWeek);
 startDateOfWeek.setDate(endDateOfWeek.getDate() - 6); 
 console.log(startDateOfWeek.toLocaleDateString());
   
-cron.schedule('*/5 * * * *', async () => {
+cron.schedule('*/2 * * * *', async () => {
   try{
     await produceReport(startDateOfWeek, endDateOfWeek, filename);
     const text = await getInfoFromGPT(endDateOfWeek);
-      sendEmail().text_attachments(
+      sendEmail().html_attachments(
       "dailydailyimf15@gmail.com", 
-      "Weekly Report",
-      text,
+      "Weekly Report",      
+      `
+      ${text}
+      <p>查閱 <a href=http://localhost:3002/en/attendance?Date=Last+Week>連結</a></p>`,
       filename,
       "report.pdf")
       console.log('running a task every minute');

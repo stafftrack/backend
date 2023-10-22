@@ -32,12 +32,18 @@ export default () => {
         }
       });
     },
-    html: function(to_who, subject, body){
+    html_attachments: function(to_who, subject, body, filename=null, path=null){
       const mailOptions = {
         from: 'raymand0109@gmail.com',
         to: to_who,
         subject: subject,
         html: body,
+        attachments: [
+          {
+            filename: filename,
+            path: path  // 替換為您的文件路徑
+          }
+        ]
       };
       Transporter.sendMail(mailOptions, function(error, info) {
         if (error) {
