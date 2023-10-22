@@ -1,7 +1,7 @@
 import express from 'express'
 import router from './api/router.js'
 import cors from "cors";
-//import sendReort from './sendReport.js'
+import sendReort from './sendReport.js'
 
 
 const port = 3000;

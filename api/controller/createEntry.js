@@ -39,12 +39,13 @@ export default async function createEntry(req, res, next) {
         "raymand0109@gmail.com",
         `Notification of Employee Carrying Contraband`,
         `
-        EmpId: ${empId}
-        Date: ${date}
-        DeptId: ${deptId}
-        Zone: ${zone}
-        During our routine inspection, it was discovered that this employee was carrying contraband items. 
-        This incident poses a serious breach of our company's policies and regulations, and we believe it requires immediate attention.
+EmpId: ${empId}
+Date: ${date}
+DeptId: ${deptId}
+Zone: ${zone}
+Contraband category:${JSON.stringify(contraband)}
+During our routine in spection, it was discovered that this employee was carrying contraband items. 
+This incident poses a serious breach of our company's policies and regulations, and we believe it requires immediate attention.
         `,
         `ContrabandImage.jpg`,
         url
